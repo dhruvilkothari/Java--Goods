@@ -1,130 +1,96 @@
 import java.util.*;
 
-class FF {
-   private int id;
-   private int quantity;
+class Product {
+    public String name;
+    public int Quantity;
+    public int price;
 
-   public FF(int id,int quantity){
-      this.id  = id;
-      this.quantity = quantity;
-   } 
-
-   public void updateDetails() {
-
-   }
-
-
-
-
+    Product(String name,int Quantity,int Price){
+        this.name = name;
+        this.Quantity = Quantity;
+        this.price = Price;
+    }
 }
 
-class User {
-   private ArrayList<Integer> food;
-   private int price;
-   
+class User{ 
+    
+    private ArrayList<Product> Goods ;
+    private int totalPrice;
 
-  public User(){
-      System.out.println("User Updated");
-      food = new ArrayList<>();
-      price=0;
-   }
+    User(){
+        Goods = new ArrayList<>();
+        totalPrice = 0;
+    }
+    public void addGoods(String name,int Quantity,int price){
+        if(Goods.size()==0){
+           Product p = new Product(name, Quantity, price);
+           Goods.add(p);
+           return;
+        }
+        else{
+            for(int i=0;i<Goods.size();i++){
+                Product p = Goods.get(i);
+                if(p.name==name){
+                    p.Quantity+=Quantity;
+                    return;
+                }
+            }
+            System.out.println("No Name Found With this name");
+        }
 
-   public void updateUserDetails (int priceValue , int id){
-      price+=priceValue;
-      food.add(id);
-   }
+    }
 
-
-   public  void showDetails (HashMap <Integer,String> foodMap,HashMap<String,Integer> priceMap) {
-      System.out.println("FOOD ITEM -----------------------------> PRICE");
-      for(int i=0;i<food.size();i++){
-         int option = food.get(i);
-         System.out.println(foodMap.get(option)+"----------------------------->"+priceMap.get(foodMap.get(option)));
-      }
-      System.out.println("Total Price------------------------------------------------->"+price);
-   }
+    public void removeGoods (String name,int Quantity){
+        if(Goods.size()==0)return;
+        for(int i=0;i<Goods.size();i++){
+            Product p = Goods.get(i);
+            if(p.name==name){
+                p.Quantity-=Quantity;
+                if(p.Quantity==0){
+                    Goods.remove(p);
+                    return;
+                }
+                return;
+            }
+        }
+    }
 }
-
-
-
-
 class Test {
 
-   public static int confirmation(){
-      Scanner sc = new Scanner(System.in);
-      System.out.println("Please Confirm Your Order");
-      int ans= sc.nextInt();      
-      return ans;
-   }
-   
+     public static int getUserInput(){
+        int option =-1;
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Please Select a proper input\n");
+        
+            option = sc.nextInt();
+            if(option==-1){
+                System.out.println("No option selected \n Thanks for shopping from us\4");
+            } 
+        
+        return option;
+    }
+
+    public static void printMenu(){
+        System.out.print("1)PannerChilli-100Rs\n2)Egg-200Rs\n3)Aloo-150Rs\n");
+    }
 
 
-  public static void printLogo(){
-      System.out.println("----------------------Cloud Kitchen-------------------");
-   }
+    public static void main(String args[]){
 
-   public static void printoption () {
-      System.out.print("1)Nachos ----- 175\n2)paneerchili ----- 200\n3)Egg -------- 150\n");
-   }
+        HashMap <Integer,String> foodMenu = new HashMap<>();
+        HashMap <String,Integer> priceMenu = new HashMap<>();
+        foodMenu.put(1,"PannerChilli");
+        foodMenu.put(2,"EGG");
+        foodMenu.put(3,"Aloo");
 
-   public static int getUserInput(){
-      int option=-1;
-      System.out.println("Please Select a required option");
-      Scanner sc = new Scanner(System.in);
-      option = sc.nextInt();
-      // sc.close();
-      if(option <1 || option >3)return -1;
-      return option;
-   }
+        priceMenu.put("PannerChilli",100);
+        priceMenu.put("EGG",200);
+        priceMenu.put("Aloo",150);
 
-   public static void main(String args[]){
-      int option = 99;
-      Scanner sc = new Scanner(System.in);
-      HashMap <Integer,String> foodMap = new HashMap<>();
-      foodMap.put(1,"Nachos");
-      foodMap.put(2, "paneerchili");
-      foodMap.put(3, "Egg");
-      HashMap<String,Integer> priceMap = new HashMap<>();
-      priceMap.put("Nachos", 175);
-      priceMap.put("paneerchili", 200);
-      priceMap.put("Egg", 150);
-      printLogo();
-      printoption();
-      User p1 =new User();
-      while(option!=-1){
-         try{
-            option = getUserInput();
-            if(option ==-1){
-               try{
-                  // break;
-                  System.out.println("Please Select a Valid Option");
-                  option = getUserInput();
-                  if(option==-1){
-                     break;
-                  }
-               }catch(Exception e){
-                  break;
-               }
-            }
-         }catch(Exception e){
-            System.out.println("Wrong Input.Please Select Valid option or Exit with Key -1");
-            continue;
-         }
 
-         int confirm = confirmation();
-         if(confirm==0){
-            System.out.println("NOT Ordered");
-            continue;
-         }
 
-         int priceValue = priceMap.get(foodMap.get(option));
 
-         // System.out.println(priceValue);
-         p1.updateUserDetails(priceValue, option);
-      }
-      p1.showDetails(foodMap, priceMap);
-      sc.close();
-      
-
-   }
+        printMenu();
+        getUserInput();
+    }
 }
